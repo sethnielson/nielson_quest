@@ -189,6 +189,8 @@ def game_loop():
                     if result is not None:
                         if result[0] == "expand":
                             player_menu_screen.expand(result[1])
+                        if result[0] == "collapse":
+                            player_menu_screen.collapse(result[1])
                         if result[0] == "menu_up":
                             player_menu_screen.menu_up()
                         if result[0] == "menu_down":
