@@ -146,16 +146,19 @@ def game_loop():
     displaysurface.blit(bg, [0,0])
     
     monster1_sprite = pygame.image.load("../assets/sprites/monster_sprite_001.png")
+    monster1_sprite90 = pygame.image.load("../assets/sprites/monster_sprite_001_90.png")
+    monster1_sprite180 = pygame.image.load("../assets/sprites/monster_sprite_001_180.png")
+    monster1_sprite270 = pygame.image.load("../assets/sprites/monster_sprite_001_270.png")
     hero_sprite_standing = pygame.image.load("../assets/sprites/hero_sprite_standing.png")
     hero_sprite_standing = pygame.transform.scale(hero_sprite_standing, (170,170))
     hero_sprite_attack1 = pygame.image.load("../assets/sprites/hero_sprite_attack1.png")
     hero_sprite_attack1 = pygame.transform.scale(hero_sprite_attack1, (170, 170))
     
     player_menu_data = {
-        "party": {
-            "hero": {
-                "melee": {
-                    "attack 1": None
+        "Party": {
+            "Urmahm": {
+                "Melee": {
+                    "Dab Attack": None
                     }
                 }
             }
@@ -164,19 +167,62 @@ def game_loop():
     player_menu_screen = Menu(player_menu_data)
     player_menu_screen.anchor(0, HEIGHT-menu_height, WIDTH, menu_height)
     
+    enemy_menu_data = {
+        "Party": {
+            "Ground Dragon": {
+                "Melee": {
+                    "Roll Attack": None
+                    }
+                }
+            }
+        }
+    enemy_menu_screen = Menu(enemy_menu_data)
+    enemy_menu_screen.anchor(450, HEIGHT-menu_height, WIDTH, menu_height)
+    
     clock = pygame.time.Clock()
     
     running = True
     hattack = 0
+    gdattack = 0
     while running:
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
-        if hattack:
+        enemy_menu_screen.display(displaysurface)
+        if hattack>16:
+            displaysurface.blit(hero_sprite_standing, [110, 125])
+            hattack = hattack - 1
+        elif hattack>12:
+            displaysurface.blit(hero_sprite_standing, [170, 75])
+            hattack = hattack - 1
+        elif hattack>8:
+            displaysurface.blit(hero_sprite_attack1, [230, 25])
+            hattack = hattack - 1
+        elif hattack>4:
+            displaysurface.blit(hero_sprite_attack1, [290, 100])
+            hattack = hattack - 1
+        elif hattack>0:
             displaysurface.blit(hero_sprite_attack1, [350, 175])
             hattack = hattack - 1
-        else:
+        ##Dragon attack
+        if gdattack>16:
+            displaysurface.blit(monster1_sprite90, [110, 125])
+            gdattack = gdattack - 1
+        elif gdattack>12:
+            displaysurface.blit(monster1_sprite90, [170, 75])
+            gdattack = gdattack - 1
+        elif gdattack>8:
+            displaysurface.blit(monster1_sprite180, [230, 25])
+            gdattack = gdattack - 1
+        elif gdattack>4:
+            displaysurface.blit(monster1_sprite270, [290, 100])
+            gdattack = gdattack - 1
+        elif gdattack>0:
+            displaysurface.blit(monster1_sprite, [350, 175])
+            gdattack = gdattack - 1
+        if hattack == 0:
             displaysurface.blit(hero_sprite_standing, [50, 175])
-        displaysurface.blit(monster1_sprite, [500,175])
+        if gdattack == 0:
+            displaysurface.blit(monster1_sprite, [500,175])
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -196,8 +242,21 @@ def game_loop():
                         if result[0] == "menu_down":
                             player_menu_screen.menu_down()
                         if result[0] == "select":
-                            if result[1][-1] == "attack 1":
-                                hattack = 10
+                            if result[1][-1] == "Dab Attack":
+                                hattack = 20
+                    result = enemy_menu_screen.process_click(mx,my)
+                    if result is not None:
+                        if result[0] == "expand":
+                            enemy_menu_screen.expand(result[1])
+                        if result[0] == "collapse":
+                            enemy_menu_screen.collapse(result[1])
+                        if result[0] == "menu_up":
+                            enemy_menu_screen.menu_up()
+                        if result[0] == "menu_down":
+                            enemy_menu_screen.menu_down()
+                        if result[0] == "select":
+                            if result[1][-1] == "Roll Attack":
+                                gdattack = 20
         clock.tick(100)
     
 if __name__=="__main__":
