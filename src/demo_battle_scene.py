@@ -188,10 +188,10 @@ def game_loop():
         player_menu_screen.display(displaysurface)
         if hattack2:
             displaysurface.blit(hero_sprite_attack1, [350, 175])
-            if hattack1 <= 10:
+            if hattack1 < 10:
                 displaysurface.blit(game_fonts.events.render("-" + str(hattack1), 1, pygame.Color(79, 2, 2)), [495, (190 - (60 - (3*hattack2)))])
-            if hattack2 > 10:
-                displaysurface.blit(game_fonts.events.render("-" + str(hattack1), 1, pygame.Color(15, 105, 1)), [495, (190 - (60 - (3*hattack2)))])
+            if hattack1 >= 10:
+                displaysurface.blit(game_fonts.events.render("-" + str(hattack1), 1, pygame.Color(14, 97, 1)), [485, (190 - (60 - (3*hattack2)))])
             hattack2 = hattack2 - 1
         else:
             displaysurface.blit(hero_sprite_standing, [50, 175])
