@@ -158,7 +158,7 @@ def game_loop():
         "Party": {
             "Urmahm": {
                 "Melee": {
-                    "Dab Attack": None
+                    "Slash Attack": None
                     }
                 }
             }
