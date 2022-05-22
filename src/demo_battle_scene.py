@@ -188,36 +188,53 @@ def game_loop():
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
         enemy_menu_screen.display(displaysurface)
-        if hattack>16:
+        if hattack>28:
             displaysurface.blit(hero_sprite_standing, [110, 125])
             hattack = hattack - 1
-        elif hattack>12:
+        elif hattack>24:
             displaysurface.blit(hero_sprite_standing, [170, 75])
             hattack = hattack - 1
-        elif hattack>8:
+        elif hattack>20:
             displaysurface.blit(hero_sprite_attack1, [230, 25])
             hattack = hattack - 1
-        elif hattack>4:
+        elif hattack>16:
             displaysurface.blit(hero_sprite_attack1, [290, 100])
             hattack = hattack - 1
-        elif hattack>0:
+        elif hattack>12:
             displaysurface.blit(hero_sprite_attack1, [350, 175])
             hattack = hattack - 1
+        elif hattack>8:
+            displaysurface.blit(hero_sprite_standing, [275, 175])
+            hattack = hattack - 1
+        elif hattack >4:
+            displaysurface.blit(hero_sprite_standing, [200, 175])
+            hattack = hattack - 1
+        elif hattack>0:
+            displaysurface.blit(hero_sprite_standing, [125, 175])
         ##Dragon attack
-        if gdattack>16:
-            displaysurface.blit(monster1_sprite90, [110, 125])
+        if gdattack>28:
+            displaysurface.blit(monster1_sprite90, [430, 200])
+            gdattack = gdattack - 1
+        elif gdattack>24:
+            displaysurface.blit(monster1_sprite90, [360, 250])
+            gdattack = gdattack - 1
+        elif gdattack>20:
+            displaysurface.blit(monster1_sprite180, [290, 275])
+            gdattack = gdattack - 1
+        elif gdattack>16:
+            displaysurface.blit(monster1_sprite270, [220, 225])
             gdattack = gdattack - 1
         elif gdattack>12:
-            displaysurface.blit(monster1_sprite90, [170, 75])
+            displaysurface.blit(monster1_sprite, [150, 175])
             gdattack = gdattack - 1
         elif gdattack>8:
-            displaysurface.blit(monster1_sprite180, [230, 25])
+            displaysurface.blit(monster1_sprite, [230, 175])
             gdattack = gdattack - 1
         elif gdattack>4:
-            displaysurface.blit(monster1_sprite270, [290, 100])
+            displaysurface.blit(monster1_sprite, [320, 175])
             gdattack = gdattack - 1
         elif gdattack>0:
-            displaysurface.blit(monster1_sprite, [350, 175])
+            displaysurface.blit(monster1_sprite, [410, 175])
             gdattack = gdattack - 1
         if hattack == 0:
             displaysurface.blit(hero_sprite_standing, [50, 175])
@@ -243,7 +260,7 @@ def game_loop():
                             player_menu_screen.menu_down()
                         if result[0] == "select":
                             if result[1][-1] == "Dab Attack":
-                                hattack = 20
+                                hattack = 32
                     result = enemy_menu_screen.process_click(mx,my)
                     if result is not None:
                         if result[0] == "expand":
@@ -256,7 +273,7 @@ def game_loop():
                             enemy_menu_screen.menu_down()
                         if result[0] == "select":
                             if result[1][-1] == "Roll Attack":
-                                gdattack = 20
+                                gdattack = 32
         clock.tick(100)
     
 if __name__=="__main__":
