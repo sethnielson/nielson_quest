@@ -1,4 +1,5 @@
 import pygame
+import random
 from pygame.locals import *
 
 # make this not global
@@ -129,10 +130,14 @@ class Menu:
                     return ("select", menu_path)
         return None
         
+    
+mhealth = 100
 
 def game_loop():
+    global mhealth
     pygame.init()
     game_fonts.default = pygame.font.SysFont("Arial", 20)
+    game_fonts.events = pygame.font.SysFont("Arial", 35)
      
     HEIGHT = 500
     WIDTH = 750
@@ -152,31 +157,49 @@ def game_loop():
     hero_sprite_attack1 = pygame.transform.scale(hero_sprite_attack1, (170, 170))
     
     player_menu_data = {
-        "party": {
-            "hero": {
+        "encounter": {
+            "fighter": {
                 "melee": {
-                    "attack 1": None
+                    "sword":{
+                        "attack 1": None
+                        }
                     }
+                }
+            , "monster": {
+                "health": {
+                    str(mhealth): None}
                 }
             }
         }
-        
+    """
+    player_menu_data = {"encounter": {"fighter": {"melee": {"sword": {"attack 1":None}}}, "monster": {health: {v1: None}}}}
+    """
     player_menu_screen = Menu(player_menu_data)
     player_menu_screen.anchor(0, HEIGHT-menu_height, WIDTH, menu_height)
     
     clock = pygame.time.Clock()
     
+    hattack1 = 5
+    hattack2 = 0    
     running = True
-    hattack = 0
     while running:
+        
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
-        if hattack:
+        if hattack2:
             displaysurface.blit(hero_sprite_attack1, [350, 175])
-            hattack = hattack - 1
+            if hattack1 <= 10:
+                displaysurface.blit(game_fonts.events.render("-" + str(hattack1), 1, pygame.Color(79, 2, 2)), [495, (190 - (60 - (3*hattack2)))])
+            if hattack2 > 10:
+                displaysurface.blit(game_fonts.events.render("-" + str(hattack1), 1, pygame.Color(15, 105, 1)), [495, (190 - (60 - (3*hattack2)))])
+            hattack2 = hattack2 - 1
         else:
             displaysurface.blit(hero_sprite_standing, [50, 175])
-        displaysurface.blit(monster1_sprite, [500,175])
+        if mhealth > 0:
+            displaysurface.blit(monster1_sprite, [500,175]) 
+        else:
+            print("You win!")
+            running = False
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -197,7 +220,14 @@ def game_loop():
                             player_menu_screen.menu_down()
                         if result[0] == "select":
                             if result[1][-1] == "attack 1":
-                                hattack = 10
+                                #hattack1 = 5
+                                hattack1 = random.randint(1, 20)
+                                mhealth -= hattack1
+                                hattack2 = 20
+                                #player_menu_data
+        """mhealth -= hattack1
+        hattack1 = 0"""
+        #print(mhealth)
         clock.tick(100)
     
 if __name__=="__main__":
