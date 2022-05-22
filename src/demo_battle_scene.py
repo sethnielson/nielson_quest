@@ -16,7 +16,7 @@ class Label:
         self.raw_text = text
         self.text = game_fonts.default.render(self.raw_text, 1, pygame.Color("White"))
         
-    def anchor(self, x, y):
+    def anchor(self, x, y): 
         self.x, self.y = x, y
         size = w, h = self.text.get_size()
         self.w, self.h = w, h
@@ -135,7 +135,7 @@ def game_loop():
     game_fonts.default = pygame.font.SysFont("Arial", 20)
      
     HEIGHT = 500
-    WIDTH = 750
+    WIDTH = 800
     menu_height = int(.2*HEIGHT) # 20% of screen
     
     bg = pygame.image.load("../assets/backgrounds/forest_with_stairs_background.jpg")
@@ -145,7 +145,8 @@ def game_loop():
     pygame.display.set_caption("Game")
     displaysurface.blit(bg, [0,0])
     
-    monster1_sprite = pygame.image.load("../assets/sprites/monster_sprite_001.png")
+    monster1_sprite = pygame.image.load("../assets/sprites/Izadragon.png")
+    monster1_sprite = pygame.transform.scale(monster1_sprite, (350,350))
     hero_sprite_standing = pygame.image.load("../assets/sprites/hero_sprite_standing.png")
     hero_sprite_standing = pygame.transform.scale(hero_sprite_standing, (170,170))
     hero_sprite_attack1 = pygame.image.load("../assets/sprites/hero_sprite_attack1.png")
@@ -172,11 +173,11 @@ def game_loop():
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
         if hattack:
-            displaysurface.blit(hero_sprite_attack1, [350, 175])
+            displaysurface.blit(hero_sprite_attack1, [350, 150])
             hattack = hattack - 1
         else:
             displaysurface.blit(hero_sprite_standing, [50, 175])
-        displaysurface.blit(monster1_sprite, [500,175])
+        displaysurface.blit(monster1_sprite, [350,30])
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -199,6 +200,14 @@ def game_loop():
                             if result[1][-1] == "attack 1":
                                 hattack = 10
         clock.tick(100)
+        
+"""
+if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygace.blit(hero_sprite_standing, [75, 150])
+        displaysurface.blit(monster1_sprite, [475 , 150])
+             for event in pygame.event.get(pygame.display.flip()
+"""
     
 if __name__=="__main__":
     game_loop()
