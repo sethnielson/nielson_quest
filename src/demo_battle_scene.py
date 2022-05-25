@@ -1,4 +1,5 @@
 import pygame
+import random
 from pygame.locals import *
 
 # make this not global
@@ -130,9 +131,13 @@ class Menu:
         return None
         
 
+mhealth = 100
+
 def game_loop():
+    global mhealth
     pygame.init()
     game_fonts.default = pygame.font.SysFont("Arial", 20)
+    game_fonts.events = pygame.font.SysFont("Arial", 35)
      
     HEIGHT = 500
     WIDTH = 750
@@ -158,7 +163,9 @@ def game_loop():
         "Party": {
             "Urmahm": {
                 "Melee": {
-                    "Slash Attack": None
+                    "Sword":{
+                        "Slash": None
+                        }
                     }
                 }
             }
@@ -168,9 +175,11 @@ def game_loop():
     player_menu_screen.anchor(0, HEIGHT-menu_height, WIDTH, menu_height)
     
     enemy_menu_data = {
-        "Party": {
+        "Encounter": {
             "Ground Dragon": {
-                "Melee": {
+                "health": {
+                    str(mhealth): None}
+            ,   "Melee": {
                     "Roll Attack": None
                     }
                 }
@@ -183,63 +192,78 @@ def game_loop():
     
     running = True
     hattack = 0
+    hattackval = 5 #base attack value for hero
+    dtimer = 20 #base value for the damage timer
     gdattack = 0
     while running:
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
         enemy_menu_screen.display(displaysurface)
-        if hattack>28:
-            displaysurface.blit(hero_sprite_standing, [110, 125])
-            hattack = hattack - 1
-        elif hattack>24:
-            displaysurface.blit(hero_sprite_standing, [170, 75])
-            hattack = hattack - 1
-        elif hattack>20:
-            displaysurface.blit(hero_sprite_attack1, [230, 25])
-            hattack = hattack - 1
-        elif hattack>16:
-            displaysurface.blit(hero_sprite_attack1, [290, 100])
-            hattack = hattack - 1
-        elif hattack>12:
-            displaysurface.blit(hero_sprite_attack1, [350, 175])
-            hattack = hattack - 1
-        elif hattack>8:
-            displaysurface.blit(hero_sprite_standing, [275, 175])
-            hattack = hattack - 1
-        elif hattack >4:
-            displaysurface.blit(hero_sprite_standing, [200, 175])
-            hattack = hattack - 1
-        elif hattack>0:
-            displaysurface.blit(hero_sprite_standing, [125, 175])
-        ##Dragon attack
-        if gdattack>28:
-            displaysurface.blit(monster1_sprite90, [430, 200])
-            gdattack = gdattack - 1
-        elif gdattack>24:
-            displaysurface.blit(monster1_sprite90, [360, 250])
-            gdattack = gdattack - 1
-        elif gdattack>20:
-            displaysurface.blit(monster1_sprite180, [290, 275])
-            gdattack = gdattack - 1
-        elif gdattack>16:
-            displaysurface.blit(monster1_sprite270, [220, 225])
-            gdattack = gdattack - 1
-        elif gdattack>12:
-            displaysurface.blit(monster1_sprite, [150, 175])
-            gdattack = gdattack - 1
-        elif gdattack>8:
-            displaysurface.blit(monster1_sprite, [230, 175])
-            gdattack = gdattack - 1
-        elif gdattack>4:
-            displaysurface.blit(monster1_sprite, [320, 175])
-            gdattack = gdattack - 1
-        elif gdattack>0:
-            displaysurface.blit(monster1_sprite, [410, 175])
-            gdattack = gdattack - 1
-        if hattack == 0:
-            displaysurface.blit(hero_sprite_standing, [50, 175])
-        if gdattack == 0:
-            displaysurface.blit(monster1_sprite, [500,175])
+        if mhealth > 0:
+            if hattack>28:
+                displaysurface.blit(hero_sprite_standing, [110, 125])
+                hattack = hattack - 1
+            elif hattack>24:
+                displaysurface.blit(hero_sprite_standing, [170, 75])
+                hattack = hattack - 1
+            elif hattack>20:
+                displaysurface.blit(hero_sprite_attack1, [230, 25])
+                hattack = hattack - 1
+            elif hattack>16:
+                displaysurface.blit(hero_sprite_attack1, [290, 100])
+                hattack = hattack - 1
+            elif hattack>13:
+                displaysurface.blit(hero_sprite_attack1, [350, 175])
+                hattack = hattack - 1
+            elif hattack>8:
+                displaysurface.blit(hero_sprite_standing, [275, 175])
+                hattack = hattack - 1
+            elif hattack >4:
+                displaysurface.blit(hero_sprite_standing, [200, 175])
+                hattack = hattack - 1
+            elif hattack>0:
+                displaysurface.blit(hero_sprite_standing, [125, 175])
+                hattack = hattack - 1
+            if hattack == 14 or dtimer < 20: #
+                if hattackval < 10:
+                    displaysurface.blit(game_fonts.events.render("-" + str(hattackval), 1, pygame.Color(79, 2, 2)), [495, (190 - (60 - (3*dtimer)))])
+                if hattackval >= 10:
+                    displaysurface.blit(game_fonts.events.render("-" + str(hattackval), 1, pygame.Color(14, 97, 1)), [485, (190 - (60 - (3*dtimer)))])
+                dtimer = dtimer -1 
+                if dtimer == 0:
+                    dtimer = 20 #reset time
+            ##Dragon attack
+            if gdattack>28:
+                displaysurface.blit(monster1_sprite90, [430, 200])
+                gdattack = gdattack - 1
+            elif gdattack>24:
+                displaysurface.blit(monster1_sprite90, [360, 250])
+                gdattack = gdattack - 1
+            elif gdattack>20:
+                displaysurface.blit(monster1_sprite180, [290, 275])
+                gdattack = gdattack - 1
+            elif gdattack>16:
+                displaysurface.blit(monster1_sprite270, [220, 225])
+                gdattack = gdattack - 1
+            elif gdattack>12:
+                displaysurface.blit(monster1_sprite, [150, 175])
+                gdattack = gdattack - 1
+            elif gdattack>8:
+                displaysurface.blit(monster1_sprite, [230, 175])
+                gdattack = gdattack - 1
+            elif gdattack>4:
+                displaysurface.blit(monster1_sprite, [320, 175])
+                gdattack = gdattack - 1
+            elif gdattack>0:
+                displaysurface.blit(monster1_sprite, [410, 175])
+                gdattack = gdattack - 1 
+            if hattack == 0:
+                displaysurface.blit(hero_sprite_standing, [50, 175])
+            if gdattack == 0:
+                displaysurface.blit(monster1_sprite, [500,175])
+        else:
+            print("You win!")
+            running = False
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -259,7 +283,9 @@ def game_loop():
                         if result[0] == "menu_down":
                             player_menu_screen.menu_down()
                         if result[0] == "select":
-                            if result[1][-1] == "Dab Attack":
+                            if result[1][-1] == "Slash" and hattack == 0:
+                                hattackval = random.randint(1, 20)
+                                mhealth -= hattackval
                                 hattack = 32
                     result = enemy_menu_screen.process_click(mx,my)
                     if result is not None:
