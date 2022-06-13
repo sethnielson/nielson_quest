@@ -146,7 +146,7 @@ def game_loop():
      
     displaysurface = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Game")
-    displaysurface.blit(bg, [0,0])
+    #displaysurface.blit(bg, [0,0])
     
     monster1_sprite = pygame.image.load("../assets/sprites/monster_sprite_001.png")
     monster1_sprite90 = pygame.image.load("../assets/sprites/monster_sprite_001_90.png")
@@ -156,7 +156,8 @@ def game_loop():
     hero_sprite_standing = pygame.transform.scale(hero_sprite_standing, (170,170))
     hero_sprite_attack1 = pygame.image.load("../assets/sprites/hero_sprite_attack1.png")
     hero_sprite_attack1 = pygame.transform.scale(hero_sprite_attack1, (170, 170))
-    #hhbar = pygame.draw.rect(displaysurface, pygame.Color(2, 100, 2), pygame.Rect(100, 185, 170, 165))
+    #pygame.draw.Rect(displaysurface, pygame.Color(2, 100, 2), pygame.Rect(0,0,200,200))  #100, 185, 170, 165
+    #pygame.display.flip()
     
     
     
@@ -202,6 +203,12 @@ def game_loop():
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
         enemy_menu_screen.display(displaysurface)
+        pygame.draw.rect(displaysurface, pygame.Color("Green"), pygame.Rect(100, 165, 100, 10))  #hero's health bar
+        if hhealth < 100:
+            pygame.draw.rect(displaysurface, pygame.Color("Red"), pygame.Rect(100, 165, 100 - hhealth, 10)) #damage to hero
+        pygame.draw.rect(displaysurface, pygame.Color("Green"), pygame.Rect(490, 165, 100, 10))  #dragon's health bar
+        if gdhealth < 100:
+            pygame.draw.rect(displaysurface, pygame.Color("Red"), pygame.Rect(490, 165, 100 - gdhealth, 10))  #damage to dragon
         if gdhealth > 0 and hhealth > 0:
             #hero attack
             if hattack>28:
