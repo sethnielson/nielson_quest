@@ -131,10 +131,8 @@ class Menu:
         return None
         
 
-mhealth = 100
 
 def game_loop():
-    global mhealth
     pygame.init()
     game_fonts.default = pygame.font.SysFont("Arial", 20)
     game_fonts.events = pygame.font.SysFont("Arial", 35)
@@ -158,6 +156,9 @@ def game_loop():
     hero_sprite_standing = pygame.transform.scale(hero_sprite_standing, (170,170))
     hero_sprite_attack1 = pygame.image.load("../assets/sprites/hero_sprite_attack1.png")
     hero_sprite_attack1 = pygame.transform.scale(hero_sprite_attack1, (170, 170))
+    #hhbar = pygame.draw.rect(displaysurface, pygame.Color(2, 100, 2), pygame.Rect(100, 185, 170, 165))
+    
+    
     
     player_menu_data = {
         "Party": {
@@ -177,9 +178,7 @@ def game_loop():
     enemy_menu_data = {
         "Encounter": {
             "Ground Dragon": {
-                "health": {
-                    str(mhealth): None}
-            ,   "Melee": {
+               "Melee": {
                     "Roll Attack": None
                     }
                 }
@@ -193,13 +192,18 @@ def game_loop():
     running = True
     hattack = 0
     hattackval = 5 #base attack value for hero
-    dtimer = 20 #base value for the damage timer
+    gdattackval = 5 #base attack value for monster
+    htimer = 20 #timer for hero-caused damage
+    gdtimer = 20 #timer for dragon-caused damage
     gdattack = 0
+    gdhealth = 100  #monster health
+    hhealth = 100   #hero health
     while running:
         displaysurface.blit(bg, [0,0])
         player_menu_screen.display(displaysurface)
         enemy_menu_screen.display(displaysurface)
-        if mhealth > 0:
+        if gdhealth > 0 and hhealth > 0:
+            #hero attack
             if hattack>28:
                 displaysurface.blit(hero_sprite_standing, [110, 125])
                 hattack = hattack - 1
@@ -224,14 +228,14 @@ def game_loop():
             elif hattack>0:
                 displaysurface.blit(hero_sprite_standing, [125, 175])
                 hattack = hattack - 1
-            if hattack == 14 or dtimer < 20: #
+            if hattack == 14 or htimer < 20: #show damage
                 if hattackval < 10:
-                    displaysurface.blit(game_fonts.events.render("-" + str(hattackval), 1, pygame.Color(79, 2, 2)), [495, (190 - (60 - (3*dtimer)))])
+                    displaysurface.blit(game_fonts.events.render("-" + str(hattackval), 1, pygame.Color(79, 2, 2)), [495, (190 - (60 - (3*htimer)))])
                 if hattackval >= 10:
-                    displaysurface.blit(game_fonts.events.render("-" + str(hattackval), 1, pygame.Color(14, 97, 1)), [485, (190 - (60 - (3*dtimer)))])
-                dtimer = dtimer -1 
-                if dtimer == 0:
-                    dtimer = 20 #reset time
+                    displaysurface.blit(game_fonts.events.render("-" + str(hattackval), 1, pygame.Color(14, 97, 1)), [495, (190 - (60 - (3*htimer)))])
+                htimer = htimer -1 
+                if htimer == 0:
+                    htimer = 20 #reset time
             ##Dragon attack
             if gdattack>28:
                 displaysurface.blit(monster1_sprite90, [430, 200])
@@ -261,8 +265,20 @@ def game_loop():
                 displaysurface.blit(hero_sprite_standing, [50, 175])
             if gdattack == 0:
                 displaysurface.blit(monster1_sprite, [500,175])
+            if gdattack == 14 or gdtimer < 20: #show damage
+                if gdattackval < 14:
+                    displaysurface.blit(game_fonts.events.render("-" + str(gdattackval), 1, pygame.Color(14, 97, 1)), [175, (190 - (60 - (3*gdtimer)))])
+                if gdattackval >= 15:
+                    displaysurface.blit(game_fonts.events.render("-" + str(gdattackval), 1, pygame.Color(79, 2, 2)), [175, (190 - (60 - (3*gdtimer)))])
+                gdtimer = gdtimer -1 
+                if gdtimer == 0:
+                    gdtimer = 20 #reset time
+                    
         else:
-            print("You win!")
+            if hhealth > 0:
+                print("The Hero wins!")
+            else:
+                print("The Dragon Wins!")
             running = False
         pygame.display.flip()
         for event in pygame.event.get():
@@ -285,7 +301,7 @@ def game_loop():
                         if result[0] == "select":
                             if result[1][-1] == "Slash" and hattack == 0:
                                 hattackval = random.randint(1, 20)
-                                mhealth -= hattackval
+                                gdhealth -= hattackval
                                 hattack = 32
                     result = enemy_menu_screen.process_click(mx,my)
                     if result is not None:
@@ -299,7 +315,10 @@ def game_loop():
                             enemy_menu_screen.menu_down()
                         if result[0] == "select":
                             if result[1][-1] == "Roll Attack":
+                                gdattackval = random.randint(1,25)
+                                hhealth -= gdattackval
                                 gdattack = 32
+                               
         clock.tick(100)
     
 if __name__=="__main__":
